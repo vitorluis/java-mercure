@@ -1,6 +1,6 @@
-plugins {
-    id 'java-library'
-}
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+apply plugin: 'java-library'
 
 group 'com.vitorvillar'
 version '1.0-RELEASE'
@@ -27,6 +27,22 @@ jar {
     }
 }
 
+task sourceJar(type: Jar) {
+    classifier "sources"
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives sourceJar
+    archives javadocJar
+}
+
 repositories {
     jcenter()
     mavenCentral()
@@ -35,4 +51,118 @@ repositories {
 dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.10'
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+signing {
+    sign configurations.archives
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            customizePom(pom)
+            groupId 'com.vitorvillar'
+            artifactId 'mercure'
+            version '1.0.0'
+
+            from components.java
+
+            // create the sign pom artifact
+            pom.withXml {
+                def pomFile = file("${project.buildDir}/generated-pom.xml")
+                writeTo(pomFile)
+                def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+                artifact(pomAscFile) {
+                    classifier = null
+                    extension = 'pom.asc'
+                }
+            }
+
+            artifact(sourceJar) {
+                classifier = 'sources'
+            }
+            artifact(javadocJar) {
+                classifier = 'javadoc'
+            }
+
+            // create the signed artifacts
+            project.tasks.signArchives.signatureFiles.each {
+                artifact(it) {
+                    def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+                    if (matcher.find()) {
+                        classifier = matcher.group(1)
+                    } else {
+                        classifier = null
+                    }
+                    extension = 'jar.asc'
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            credentials {
+                username sonatypeUsername
+                password sonatypePassword
+            }
+        }
+    }
+}
+
+def customizePom(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        // eliminate test-scoped dependencies (no need in maven central POMs)
+        root.dependencies.removeAll { dep ->
+            dep.scope == "test"
+        }
+
+        // add all items necessary for maven central publication
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+
+            description 'Java Plugin to Publish messages on Mercure Hub'
+            name 'Java Mercure'
+            url 'https://github.com/vitorluis/java-mercure'
+            organization {
+                name 'com.vitorvillar'
+                url 'https://vitorvillar.com'
+            }
+            issueManagement {
+                system 'GitHub'
+                url 'https://github.com/vitorluis/java-mercure/issues'
+            }
+            licenses {
+                license {
+                    name 'MIT License'
+                    url 'https://github.com/vitorluis/java-mercure/blob/master/LICENSE'
+                    distribution 'repo'
+                }
+            }
+            scm {
+                url 'https://github.com/vitorluis/java-mercure'
+                connection 'scm:git:git@github.com:vitorluis/java-mercure.git'
+                developerConnection 'scm:git:https://github.com/vitorluis/java-mercure.git'
+            }
+            developers {
+                developer {
+                    name 'Vitor Villar'
+                }
+            }
+        }
+    }
+}
+
+model {
+    tasks.generatePomFileForMavenJavaPublication {
+        destination = file("$buildDir/generated-pom.xml")
+    }
+    tasks.publishMavenJavaPublicationToMavenLocal {
+        dependsOn project.tasks.signArchives
+    }
+    tasks.publishMavenJavaPublicationToMavenRepository {
+        dependsOn project.tasks.signArchives
+    }
 }
