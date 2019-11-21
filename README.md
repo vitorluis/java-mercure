@@ -3,7 +3,7 @@
 The goal of this library is to provide a quick way to publish messages on Mercure. 
 If you don't know what Mercure is, take a look here: (https://github.com/dunglas/mercure).
 
-##How to use
+## How to use
 
 This library is really simple to use, you just need to create a new `Publisher` and for each message you
 want to publish, just create a new `Message` object.
