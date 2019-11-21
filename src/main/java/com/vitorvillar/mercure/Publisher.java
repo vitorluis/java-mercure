@@ -20,6 +20,15 @@ public class Publisher {
         var parameters = new HashMap<String, String>();
         parameters.put("data", message.getData());
         parameters.put("topic", message.getTopic());
+        parameters.put("id", message.getId().toString());
+
+        if (message.getTarget() != null && message.getTarget().isEmpty() == false) {
+            parameters.put("target", message.getTarget());
+        }
+
+        if (message.getType() != null && message.getType().isEmpty() == false) {
+            parameters.put("type", message.getType());
+        }
 
         try {
             return this.httpClient.sendRequest(parameters);
