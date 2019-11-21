@@ -2,6 +2,7 @@ package com.vitorvillar.mercure.http;
 
 
 import com.vitorvillar.mercure.http.exceptions.ForbiddenException;
+import com.vitorvillar.mercure.http.exceptions.NotFoundException;
 import com.vitorvillar.mercure.http.exceptions.UnauthorizedException;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -27,10 +28,10 @@ public class Client {
         this.httpClient = HttpClients.createDefault();
         this.url = url;
         this.authorizationToken = authorizationToken;
-
     }
 
-    public String sendRequest(Map<String, String> postData) throws UnauthorizedException, ForbiddenException {
+    public String sendRequest(Map<String, String> postData) throws UnauthorizedException, ForbiddenException,
+            NotFoundException {
         var responseContent = "";
         var request = new HttpPost(this.url);
         request.addHeader("Authorization", "Bearer " + this.authorizationToken);
@@ -54,9 +55,11 @@ public class Client {
                     throw new UnauthorizedException(responseContent);
                 case HttpStatus.SC_FORBIDDEN:
                     throw new ForbiddenException(responseContent);
+                case HttpStatus.SC_NOT_FOUND:
+                    throw new NotFoundException();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new NotFoundException();
         }
 
         return responseContent;
