@@ -5,7 +5,9 @@ If you don't know what Mercure is, take a look here: (https://github.com/dunglas
 
 ## Installing
 
-You can install via Gradle or Maven:
+You can install via Gradle or Maven. Whatever floats your boat. :)
+
+Gradle:
 ```groovy
 implementation 'com.vitorvillar:mercure:1.0.0'
 ```
