@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.vitorvillar</groupId>
+    <artifactId>mercure</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>Java Mercure</name>
+    <description>Java Plugin to Publish messages on Mercure Hub</description>
+    <url>https://github.com/vitorluis/java-mercure</url>
+    <developers>
+        <developer>
+            <name>Vitor Villar</name>
+            <email>vitor.luis98@gmail.com</email>
+            <url>http://vitorvillar.com/</url>
+        </developer>
+    </developers>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/vitorluis/java-mercure</url>
+        <connection>scm:git:git@github.com:rainerhahnekamp/superlib.git</connection>
+        <developerConnection>scm:git:git@github.com:vitorluis/java-mercure.git</developerConnection>
+    </scm>
+    <properties>
+        <java.version>1.11</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+</project>
