@@ -3,6 +3,23 @@
 The goal of this library is to provide a quick way to publish messages on Mercure. 
 If you don't know what Mercure is, take a look here: (https://github.com/dunglas/mercure).
 
+## Installing
+
+You can install via Gradle or Maven:
+```groovy
+implementation 'com.vitorvillar:mercure:1.0.0'
+```
+
+Maven:
+```xml
+<dependency>
+  <groupId>com.vitorvillar</groupId>
+  <artifactId>mercure</artifactId>
+  <version>1.0.0</version>
+  <type>pom</type>
+</dependency>
+```
+
 ## How to use
 
 This library is really simple to use, you just need to create a new `Publisher` and for each message you
