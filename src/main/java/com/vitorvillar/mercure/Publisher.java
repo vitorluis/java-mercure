@@ -26,8 +26,8 @@ public class Publisher {
         parameters.put("topic", message.getTopic());
         parameters.put("id", message.getId().toString());
 
-        if (message.getTarget() != null && message.getTarget().isEmpty() == false) {
-            parameters.put("target", message.getTarget());
+        if (message.isPrivate()) {
+            parameters.put("private", "on");
         }
 
         if (message.getType() != null && message.getType().isEmpty() == false) {
