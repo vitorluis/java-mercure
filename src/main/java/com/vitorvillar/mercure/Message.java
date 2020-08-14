@@ -7,7 +7,7 @@ public class Message {
     private UUID id;
     private String data;
     private String topic;
-    private String target;
+    private Boolean private;
     private String type;
 
     public Message(String data, String topic) {
@@ -16,11 +16,11 @@ public class Message {
         this.id = UUID.randomUUID();
     }
 
-    public Message(UUID id, String data, String topic, String target, String type) {
+    public Message(UUID id, String data, String topic, Boolean private, String type) {
         this.id = id;
         this.data = data;
         this.topic = topic;
-        this.target = target;
+        this.private = private;
         this.type = type;
     }
 
@@ -48,12 +48,12 @@ public class Message {
         this.id = id;
     }
 
-    public String getTarget() {
-        return target;
+    public Boolean isPrivate() {
+        return private;
     }
 
-    public void setTarget(String target) {
-        this.target = target;
+    public void setPrivate(Boolean private) {
+        this.private = private;
     }
 
     public String getType() {
